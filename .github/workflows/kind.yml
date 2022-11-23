@@ -24,7 +24,12 @@ jobs:
       fail-fast: false
       matrix:
         kind:
+          - 'v1.19.16'
+          - 'v1.20.15'
           - 'minimum'
+          - 'v1.22.15'
+          - 'v1.23.13'
+          - 'v1.24.7'
           - 'latest'
     name: KinD tests
     steps:
