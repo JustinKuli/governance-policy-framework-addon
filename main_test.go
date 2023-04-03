@@ -27,6 +27,7 @@ func TestRunMain(t *testing.T) {
 
 	os.Args = append(
 		os.Args,
+		"controller",
 		"--leader-elect=false",
 		fmt.Sprintf("--cluster-namespace=%s", clusterNs),
 		fmt.Sprintf("--cluster-namespace-on-hub=%s", clusterNsHub),
