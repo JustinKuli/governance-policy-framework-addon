@@ -4,9 +4,10 @@ on:
   pull_request:
     branches:
       - main
+      - stolostron
       - release-[0-9]+.[0-9]+
 
 jobs:
   fw-kind-tests:
     name: KinD
-    uses: stolostron/governance-policy-framework/.github/workflows/kind.yml@main
+    uses: JustinKuli/governance-policy-framework/.github/workflows/kind.yml@9016260c57d66f65deae9e50dfac48a667550981
