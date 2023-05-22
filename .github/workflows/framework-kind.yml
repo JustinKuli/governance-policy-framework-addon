@@ -10,4 +10,4 @@ on:
 jobs:
   fw-kind-tests:
     name: KinD
-    uses: JustinKuli/governance-policy-framework/.github/workflows/kind.yml@9016260c57d66f65deae9e50dfac48a667550981
+    uses: JustinKuli/governance-policy-framework/.github/workflows/kind.yml@11793584de41c6e537e07d27f5538439b13dfb63
