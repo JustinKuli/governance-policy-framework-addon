@@ -372,6 +372,7 @@ func main() {
 func getManager(
 	mgrCtx context.Context, options manager.Options, healthAddr string, hubCfg *rest.Config, managedCfg *rest.Config,
 ) manager.Manager {
+	// This is a direct client!
 	hubClient, err := client.New(hubCfg, client.Options{Scheme: scheme})
 	if err != nil {
 		log.Error(err, "Failed to generate client to the hub cluster")
@@ -518,6 +519,7 @@ func getManager(
 func getHubManager(
 	options manager.Options, healthAddr string, hubCfg *rest.Config, managedCfg *rest.Config,
 ) manager.Manager {
+	// This is a direct client
 	managedClient, err := client.New(managedCfg, client.Options{Scheme: scheme})
 	if err != nil {
 		log.Error(err, "Failed to generate client to the managed cluster")

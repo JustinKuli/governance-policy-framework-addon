@@ -40,8 +40,8 @@ func (r *SecretReconciler) SetupWithManager(mgr ctrl.Manager) error {
 var _ reconcile.Reconciler = &SecretReconciler{}
 
 type SecretReconciler struct {
-	client.Client
-	ManagedClient client.Client
+	client.Client               // this client uses the customized cache
+	ManagedClient client.Client // this is a direct client
 	Scheme        *runtime.Scheme
 	// The namespace that the secret should be synced to.
 	TargetNamespace string
@@ -103,6 +103,7 @@ func (r *SecretReconciler) Reconcile(ctx context.Context, request reconcile.Requ
 	}
 
 	managedEncryptionSecret := &corev1.Secret{}
+	// This is a real read on the managed API server. But in this case, it's probably not that big of a deal.
 	err = r.ManagedClient.Get(
 		ctx, types.NamespacedName{Namespace: r.TargetNamespace, Name: request.Name}, managedEncryptionSecret,
 	)

@@ -40,10 +40,8 @@ var _ reconcile.Reconciler = &PolicyReconciler{}
 
 // ReconcilePolicy reconciles a Policy object
 type PolicyReconciler struct {
-	// This client, initialized using mgr.Client() above, is a split client
-	// that reads objects from the cache and writes to the apiserver
-	HubClient       client.Client
-	ManagedClient   client.Client
+	HubClient       client.Client // This client will use the (customized) cache for reads
+	ManagedClient   client.Client // This is a direct client
 	ManagedRecorder record.EventRecorder
 	Scheme          *runtime.Scheme
 	// The namespace that the replicated policies should be synced to.
@@ -110,6 +108,7 @@ func (r *PolicyReconciler) Reconcile(ctx context.Context, request reconcile.Requ
 	}
 
 	managedPlc := &policiesv1.Policy{}
+	// This is a real read on the managed cluster API server every reconcile
 	err = r.ManagedClient.Get(ctx, types.NamespacedName{Namespace: r.TargetNamespace, Name: request.Name}, managedPlc)
 
 	if err != nil {

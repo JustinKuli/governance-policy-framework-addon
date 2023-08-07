@@ -54,10 +54,8 @@ var _ reconcile.Reconciler = &PolicyReconciler{}
 
 // ReconcilePolicy reconciles a Policy object
 type PolicyReconciler struct {
-	// This client, initialized using mgr.Client() above, is a split client
-	// that reads objects from the cache and writes to the apiserver
-	HubClient             client.Client
-	ManagedClient         client.Client
+	HubClient             client.Client // From the current main.go, this is a direct client
+	ManagedClient         client.Client // This client will use the (customized) cache for reads
 	HubRecorder           record.EventRecorder
 	ManagedRecorder       record.EventRecorder
 	Scheme                *runtime.Scheme
@@ -135,6 +133,7 @@ func (r *PolicyReconciler) Reconcile(ctx context.Context, request reconcile.Requ
 	}
 	// get hub policy
 	hubPlc := &policiesv1.Policy{}
+	// Since this is a direct client, I think this is a "real" read from the Hub, every reconcile?
 	err = r.HubClient.Get(ctx, types.NamespacedName{Namespace: r.ClusterNamespaceOnHub, Name: request.Name}, hubPlc)
 
 	if err != nil {
@@ -399,6 +398,7 @@ func (r *PolicyReconciler) Reconcile(ctx context.Context, request reconcile.Requ
 
 	if os.Getenv("ON_MULTICLUSTERHUB") != "true" {
 		// Re-fetch the hub template in case it changed
+		// Again, this is a real read on the hub, every time we need to update the hub status.
 		err = r.HubClient.Get(ctx, types.NamespacedName{Namespace: r.ClusterNamespaceOnHub, Name: request.Name}, hubPlc)
 		if err != nil {
 			log.Error(err, "Failed to refresh the cached policy. Will use existing policy.")
